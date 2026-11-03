@@ -59,13 +59,13 @@ class Simulation:
 class Ollama:
     def __init__(self):
         self.url = os.environ.get('OLLAMA_URL', 'http://127.0.0.1:11434').rstrip('/')
-        self.model = os.environ.get('OLLAMA_MODEL', 'qwen2.5:3b')
+        self.model = os.environ.get('OLLAMA_MODEL', 'qwen3:4b-instruct')
         self.name = 'ollama / ' + self.model
 
     def generate(self, context, question=None):
         payload = {"model": self.model, "system": POLICY,
                    "prompt": json.dumps({"context": context, "question": question}, ensure_ascii=False),
-                   "stream": False, "format": "json", "options": {"temperature": 0, "seed": 42}}
+                   "stream": False, "think": False, "format": "json", "options": {"temperature": 0, "seed": 42}}
         headers = {'Content-Type': 'application/json'}
         token = os.environ.get('MODEL_API_KEY')
         if token:

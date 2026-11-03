@@ -11,6 +11,19 @@ except ImportError:
 
 @unittest.skipIf(AppTest is None, 'Streamlit 未安装；仅跳过界面测试')
 class DashboardTests(unittest.TestCase):
+    def test_mode_switch_does_not_trigger_generation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.dict(os.environ, {'ACE_DB': str(Path(temp) / 'modes.sqlite3'), 'ACE_MODE': 'simulation'}):
+                app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / 'app.py')).run(timeout=20)
+                next(item for item in app.selectbox if item.label == '运行模式').select('ollama').run(timeout=20)
+                self.assertFalse(app.exception)
+                self.assertTrue(any('本地模型模式' in item.value for item in app.info))
+                self.assertEqual(app.metric[1].value, '0')
+                next(item for item in app.selectbox if item.label == '运行模式').select('simulation').run(timeout=20)
+                self.assertFalse(app.exception)
+                self.assertTrue(any('确定性规则模拟' in item.value for item in app.warning))
+                self.assertEqual(app.metric[1].value, '0')
+
     def test_complete_demo_flow(self):
         with tempfile.TemporaryDirectory() as temp:
             with patch.dict(os.environ, {'ACE_DB': str(Path(temp) / 'ui.sqlite3'), 'ACE_MODE': 'simulation'}):

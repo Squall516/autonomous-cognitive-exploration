@@ -1,4 +1,5 @@
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -18,6 +19,12 @@ class CoreTests(unittest.TestCase):
 
     def tearDown(self):
         self.temp.cleanup()
+
+    def test_ollama_default_matches_installed_qwen3_model(self):
+        with patch.dict(os.environ, {}, clear=True):
+            backend = Ollama()
+        self.assertEqual(backend.model, 'qwen3:4b-instruct')
+        self.assertEqual(backend.url, 'http://127.0.0.1:11434')
 
     def test_restart_restores_all_data(self):
         self.store.seed(FIXTURE)
@@ -141,6 +148,7 @@ class CoreTests(unittest.TestCase):
             self.assertEqual(validate(result, context, '共同问题'), output)
             payload = json.loads(mock.call_args[0][0].data)
             self.assertFalse(payload['stream'])
+            self.assertFalse(payload['think'])
             self.assertEqual(payload['options'], {'temperature': 0, 'seed': 42})
 
 
