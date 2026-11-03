@@ -4,6 +4,10 @@ A local research prototype exploring whether persistent memory, an updateable st
 
 **This project does not claim to create or prove artificial consciousness.** Generated explanations are outputs to inspect, not observations of subjective experience. AI assisted development; the author must personally verify design choices, experiments and conclusions.
 
+## Motivation
+
+The project investigates a concrete engineering question: how do stored experiences and an explicit, updateable state influence the next question a system generates? It makes that loop inspectable rather than treating a fluent conversation as evidence of continuity or consciousness. This describes the implemented research aim; the author should confirm any personal origin story separately.
+
 ## Scope of this repository
 
 This checkout is the original MVP, with a single model call per exploration. It supports SQLite persistence, a self-state profile, manual exploration, a loop capped at five rounds, a Streamlit dashboard, and a custom-question A/B comparison. It does not contain the separate later prototype's three-candidate selection or fixed-case benchmark suite; results from that version must not be attributed to this checkout.
@@ -98,3 +102,23 @@ data/demo.json           Synthetic input fixture
 data/example-run.json    Original rule-simulation example
 LOCAL_VERIFICATION.md    Current checkout verification evidence
 ```
+
+## Final application review and demonstration
+
+The 3 November final review reran all **17 tests (0 failures)**, dependency consistency checking, simulation (three rounds and one comparison), and a real Qwen3 exploration plus A/B pair. The real run took **7.673 s** and **14.765 s** respectively; reopening its temporary database restored the same logical export. Full synthetic-context inputs, unedited outputs, model digest, settings and timing are in [the real-run artifact](docs/qwen-review-20261103.json). Earlier records remain unchanged.
+
+A used the low-temperature history but cited generated summaries #4/#5 instead of original observations #1/#3. B had no records and requested historical evidence. The plans did not specify temperature values, repeat counts or decision thresholds. The generated prose also does not consistently repeat the fixture's synthetic-data warning. These are limitations, not errors to hide by editing the output.
+
+This demonstrates functioning persistence, state hand-off and different outputs under different memory contexts in this case. It does not establish improved scientific reasoning, a general causal effect, long-term cognitive identity, consciousness, autonomous will or subjective experience. Explanation strings are inspectable generated text, not access to internal mental processes. Simulation differences are programmed into the rules and cannot independently support model-capability claims.
+
+### How autonomous is it?
+
+The user chooses a backend and starts a round or a loop of up to five rounds. Each round reads the latest 12 memories and current state, generates one question/result, validates the schema and accessible citation IDs, and commits results and state together. Subsequent rounds can proceed without another user question. There is no persistent background scheduler, independent observation collection, tool execution, or multiple-candidate ranking in this checkout. The name “self-state” refers to stored software fields.
+
+### Evidence and next steps
+
+See [DEMO.md](docs/DEMO.md) for a short demonstration and a real-run reproduction command, and [the Chinese review](APPLICATION_REVIEW_ZH.md) for verified versus unverified claims. The screenshot below is an actual **rule-simulation** run on an isolated synthetic database, not a Qwen3 result.
+
+![Actual simulation dashboard with synthetic records](docs/simulation-review.png)
+
+Priorities for later work: (1) define task-specific rubrics and independent ratings; (2) evaluate several cross-time cases and repeated runs; (3) measure citation support and distinguish original observations from generated summaries; (4) compare relevance retrieval with this recency baseline. These are future plans, not implemented benchmark features.
